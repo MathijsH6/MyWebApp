@@ -16,29 +16,10 @@
   </style>
 </head>
 <body>
-    <header>
-      <nav class="nav-btns">
-        <a href="/" class="btn btn-outline-primary">Home</a>
-        <a href="/films" class="btn btn-outline-primary">Films</a>
-        <a href="#" class="btn btn-outline-primary">Acteurs</a>
-        <a href="/about" class="btn btn-outline-primary">About</a>
-        <a href="/contact" class="btn btn-outline-primary">Contact</a>
-      </nav>
-      <!-- Profiel dropdown -->
-      <div class="dropdown" style="position: absolute; top: 1rem; right: 2rem;">
-        <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle me-2" viewBox="0 0 16 16">
-            <path d="M13.468 12.37C12.758 11.226 11.482 10.5 10 10.5c-1.482 0-2.758.726-3.468 1.87A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>
-            <path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
-          </svg>
-          Profiel
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-          <li><a class="dropdown-item" href="/register">Registreren</a></li>
-          <li><a class="dropdown-item" href="/login">Inloggen</a></li>
-        </ul>
-      </div>
-    </header>
+    <script>
+      window.isLoggedIn = "<%= typeof customer_id !== 'undefined' && customer_id ? 'true' : 'false' %>";
+    </script>
+    <%- include('partials/header') %>
   <div class="container">
     <h1 class="mb-4 text-center">Neem contact op met ons team</h1>
     <p class="lead text-center mb-5">
@@ -48,12 +29,12 @@
       <div class="col-md-3 contact-card text-center">
         <h5>Chat met verkoop</h5>
         <p>Ons vriendelijke team helpt je graag verder.</p>
-        <a href="mailto:m.haest@avans.student.nl" class="btn btn-outline-primary">m.haest@avans.student.nl</a>
+        <a href="mailto:m.haest@student.avans.nl" class="btn btn-outline-primary">m.haest@student.avans.nl</a>
       </div>
       <div class="col-md-3 contact-card text-center">
         <h5>Chat met support</h5>
         <p>Technische vragen? Wij helpen je wanneer het ons uitkomt!</p>
-        <a href="mailto:m.haest@avans.student.nl" class="btn btn-outline-primary">m.haest@avans.student.nl</a>
+        <a href="mailto:m.haest@student.avans.nl" class="btn btn-outline-primary">m.haest@student.avans.nl</a>
       </div>
       <div class="col-md-3 contact-card text-center">
         <h5>Bezoek ons</h5>

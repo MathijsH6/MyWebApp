@@ -38,3 +38,12 @@ body {
   max-width: 400px;
   margin: 2rem auto 2rem auto;
 }
+
+.logout-btn {
+  color: #212529;
+  transition: background 0.2s, color 0.2s;
+}
+.logout-btn:hover {
+  background: #dc3545 !important;
+  color: #fff !important;
+}

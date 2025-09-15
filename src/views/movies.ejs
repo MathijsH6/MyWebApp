@@ -7,59 +7,98 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <style>
-      /* ...je bestaande CSS... */
+      .card {
+        position: relative;
+      }
+      .favorite-checkbox {
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        z-index: 2;
+        accent-color: #222;
+      }
+      .card-title {
+        display: inline-block;
+        margin-right: 8px;
+      }
+      #favorites-section {
+        margin-bottom: 2rem;
+      }
     </style>
   </head>
   <body>
-    <header>
-      <nav class="nav-btns">
-        <a href="/" class="btn btn-outline-primary">Home</a>
-        <a href="/films" class="btn btn-outline-primary">Films</a>
-        <a href="#" class="btn btn-outline-primary">Acteurs</a>
-        <a href="/about" class="btn btn-outline-primary">About</a>
-        <a href="/contact" class="btn btn-outline-primary">Contact</a>
-      </nav>
-      <!-- Profiel dropdown -->
-      <div class="dropdown" style="position: absolute; top: 1rem; right: 2rem;">
-        <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle me-2" viewBox="0 0 16 16">
-            <path d="M13.468 12.37C12.758 11.226 11.482 10.5 10 10.5c-1.482 0-2.758.726-3.468 1.87A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>
-            <path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
-          </svg>
-          Profiel
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-          <li><a class="dropdown-item" href="/register">Registreren</a></li>
-          <li><a class="dropdown-item" href="/login">Inloggen</a></li>
-        </ul>
-      </div>
-    </header>
+    <script>
+      window.isLoggedIn = "<%= typeof customer_id !== 'undefined' && customer_id ? 'true' : 'false' %>";
+    </script>
+    <%- include('partials/header') %>
     <div class="container">
       <h1 class="mb-3 text-center">Sakila Films</h1>
-      <input type="text" class="form-control search-bar" id="searchInput" placeholder="Zoek op titel...">
-      <div id="films-list" class="row">
-        <% if (typeof films !== 'undefined' && films.length > 0) { %>
-          <% films.forEach(function(film) { %>
-            <div class="col-md-6 col-lg-4">
-              <a href="/films/<%= film.film_id %>" style="text-decoration:none; color:inherit;">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title"><%= film.title %></h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Jaar: <%= film.release_year %></h6>
-                    <p class="card-text"><%= film.description || 'Geen beschrijving beschikbaar.' %></p>
-                  </div>
-                </div>
-              </a>
-            </div>
-          <% }); %>
-        <% } else { %>
-          <div class="col-12 text-center"><p>Geen films gevonden.</p></div>
-        <% } %>
+      <!-- Favorites Section -->
+      <div id="favorites-section" class="mb-4">
+        <h4>Favorieten:</h4>
+        <div id="favorites-list" class="row"></div>
       </div>
+      <!-- Filters -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <select id="genreFilter" class="form-select">
+            <option value="">Alle genres</option>
+            <% if (typeof genres !== 'undefined') { %>
+              <% genres.forEach(function(genre) { %>
+                <option value="<%= genre.name %>"><%= genre.name %></option>
+              <% }); %>
+            <% } %>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <select id="yearFilter" class="form-select">
+            <option value="">Alle jaren</option>
+            <% if (typeof years !== 'undefined') { %>
+              <% years.forEach(function(year) { %>
+                <option value="<%= year %>"><%= year %></option>
+              <% }); %>
+            <% } %>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <select id="ratingFilter" class="form-select">
+            <option value="">Alle ratings</option>
+            <% if (typeof ratings !== 'undefined') { %>
+              <% ratings.forEach(function(rating) { %>
+                <option value="<%= rating %>"><%= rating %></option>
+              <% }); %>
+            <% } %>
+          </select>
+        </div>
+      </div>
+      <input type="text" class="form-control search-bar" id="searchInput" placeholder="Zoek op titel...">
+      <div id="films-list" class="row"></div>
     </div>
     <script>
-      // Zoekfunctie voor client-side filtering
-      const filmsData = JSON.parse('<%- JSON.stringify(films || []) %>');
+      window.isLoggedIn = "<%= typeof customer_id !== 'undefined' && customer_id ? 'true' : 'false' %>";
+      window.filmsData = JSON.parse('<%- JSON.stringify(films || []) %>');
+
+      let favoriteIds = JSON.parse('<%- JSON.stringify(favoriteIds || []) %>');
+
+      function syncFavoritesGlobal() {
+        window.favoriteIds = [...favoriteIds];
+      }
+
+      function renderFavorites() {
+        const favoritesList = document.getElementById('favorites-list');
+        favoritesList.innerHTML = '';
+        favoriteIds.forEach(favId => {
+          const film = window.filmsData.find(f => f.film_id === favId);
+          if (film) {
+            favoritesList.innerHTML += `
+              <div class="col-auto mb-2">
+                <span class="badge bg-dark">${film.title}</span>
+              </div>
+            `;
+          }
+        });
+      }
+
       function renderFilms(films) {
         const filmsList = document.getElementById('films-list');
         filmsList.innerHTML = '';
@@ -68,27 +107,102 @@
           return;
         }
         films.forEach(film => {
+          const isFav = favoriteIds.includes(film.film_id);
           filmsList.innerHTML += `
             <div class="col-md-6 col-lg-4">
-              <a href="/films/${film.film_id}" style="text-decoration:none; color:inherit;">
-                <div class="card">
-                  <div class="card-body">
+              <div class="card">
+                <input type="checkbox" class="favorite-checkbox" data-id="${film.film_id}" ${isFav ? 'checked' : ''}>
+                <div class="card-body">
+                  <a href="/films/${film.film_id}" style="text-decoration:none; color:inherit;">
                     <h5 class="card-title">${film.title}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Jaar: ${film.release_year}</h6>
-                    <p class="card-text">${film.description || 'Geen beschrijving beschikbaar.'}</p>
-                  </div>
+                  </a>
+                  <h6 class="card-subtitle mb-2 text-muted">Jaar: ${film.release_year}</h6>
+                  <p class="card-text">${film.description || 'Geen beschrijving beschikbaar.'}</p>
+                  <p class="card-text"><strong>Genre:</strong> ${film.genre}</p>
+                  <p class="card-text"><strong>Rating:</strong> ${film.rating}</p>
                 </div>
-              </a>
+              </div>
             </div>
           `;
         });
+
+        activateFavoriteCheckboxes();
       }
-      renderFilms(filmsData);
-      document.getElementById('searchInput').addEventListener('input', function() {
-        const query = this.value.toLowerCase();
-        const filtered = filmsData.filter(film => film.title.toLowerCase().includes(query));
+
+      function activateFavoriteCheckboxes() {
+        document.querySelectorAll('.favorite-checkbox').forEach(box => {
+          box.addEventListener('change', function(e) {
+            const filmId = Number(this.getAttribute('data-id'));
+            if (window.isLoggedIn !== "true") {
+              alert('Je bent niet ingelogd. Maak een account aan en log in.');
+              this.checked = false;
+              return;
+            }
+            if (this.checked) {
+              fetch('/favorites/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filmId })
+              })
+              .then(res => res.json())
+              .then(data => {
+                if (data.error) {
+                  alert(data.error);
+                  this.checked = false;
+                  return;
+                }
+                if (data.success && !favoriteIds.includes(filmId)) {
+                  favoriteIds.push(filmId);
+                  syncFavoritesGlobal();
+                  renderFavorites();
+                }
+              });
+            } else {
+              fetch('/favorites/remove', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filmId })
+              })
+              .then(res => res.json())
+              .then(data => {
+                if (data.success) {
+                  favoriteIds = favoriteIds.filter(id => id !== filmId);
+                  syncFavoritesGlobal();
+                  renderFavorites();
+                }
+              });
+            }
+          });
+        });
+      }
+
+      function filterFilms() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const genre = document.getElementById('genreFilter').value;
+        const year = document.getElementById('yearFilter').value;
+        const rating = document.getElementById('ratingFilter').value;
+
+        let filtered = window.filmsData.filter(film => film.title.toLowerCase().includes(query));
+        if (genre) {
+          filtered = filtered.filter(film => film.genre === genre);
+        }
+        if (year) {
+          filtered = filtered.filter(film => film.release_year == year);
+        }
+        if (rating) {
+          filtered = filtered.filter(film => film.rating === rating);
+        }
         renderFilms(filtered);
-      });
+      }
+
+      renderFilms(window.filmsData);
+      renderFavorites();
+      syncFavoritesGlobal();
+
+      document.getElementById('searchInput').addEventListener('input', filterFilms);
+      document.getElementById('genreFilter').addEventListener('change', filterFilms);
+      document.getElementById('yearFilter').addEventListener('change', filterFilms);
+      document.getElementById('ratingFilter').addEventListener('change', filterFilms);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>

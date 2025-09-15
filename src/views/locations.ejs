@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8">
+    <title>Locaties - Sakila Films</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <%- include('partials/header') %>
+    <div class="container mt-5">
+      <h1 class="mb-4 text-center">Onze locaties</h1>
+      <p class="lead text-center mb-5">
+        Hier vind je alle locaties waar je films kunt huren en ophalen!
+      </p>
+     ...
+<div class="row justify-content-center">
+  <% if (locations && locations.length > 0) { %>
+    <% locations.forEach(function(loc) { %>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title"><%= loc.city %></h5>
+            <p class="card-text">
+              <%= loc.address %><br>
+              <%= loc.postal_code %> <%= loc.district %><br>
+              <a href="https://www.google.com/maps?q=<%= encodeURIComponent(loc.address + ', ' + loc.postal_code + ' ' + loc.city) %>" target="_blank" class="btn btn-outline-primary btn-sm mt-2">Bekijk op Google Maps</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  <% } else { %>
+    <div class="col-12 text-center"><p>Geen locaties gevonden.</p></div>
+  <% } %>
+</div>
+...
+      <div class="text-center mt-5">
+        <p>Meer locaties binnenkort beschikbaar!</p>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
