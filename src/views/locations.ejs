@@ -8,7 +8,11 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <%- include('partials/header') %>
+      <script>
+      window.isLoggedIn = "<%= typeof customer_id !== 'undefined' && customer_id ? 'true' : 'false' %>";
+      window.favoriteIds = JSON.parse('<%- JSON.stringify(favoriteIds || []) %>') ;
+    </script>
+    <%- include('partials/header', { customer_id: customer_id }) %>
     <div class="container mt-5">
       <h1 class="mb-4 text-center">Onze locaties</h1>
       <p class="lead text-center mb-5">

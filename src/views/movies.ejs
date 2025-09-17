@@ -28,16 +28,18 @@
   </head>
   <body>
     <script>
-      window.isLoggedIn = "<%= typeof customer_id !== 'undefined' && customer_id ? 'true' : 'false' %>";
+        window.isLoggedIn = "<%= typeof customer_id !== 'undefined' && customer_id ? 'true' : 'false' %>";
+        window.favoriteIds = JSON.parse('<%- JSON.stringify(favoriteIds || []) %>');
+        window.filmsData = JSON.parse('<%- JSON.stringify(films || []) %>');
     </script>
-    <%- include('partials/header') %>
+    <%- include('partials/header', { customer_id: customer_id }) %>
     <div class="container">
       <h1 class="mb-3 text-center">Sakila Films</h1>
       <!-- Favorites Section -->
-      <div id="favorites-section" class="mb-4">
+      <!-- <div id="favorites-section" class="mb-4">
         <h4>Favorieten:</h4>
         <div id="favorites-list" class="row"></div>
-      </div>
+      </div> -->
       <!-- Filters -->
       <div class="row mb-3">
         <div class="col-md-4">
@@ -109,8 +111,8 @@
         films.forEach(film => {
           const isFav = favoriteIds.includes(film.film_id);
           filmsList.innerHTML += `
-            <div class="col-md-6 col-lg-4">
-              <div class="card">
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="card h-100">
                 <input type="checkbox" class="favorite-checkbox" data-id="${film.film_id}" ${isFav ? 'checked' : ''}>
                 <div class="card-body">
                   <a href="/films/${film.film_id}" style="text-decoration:none; color:inherit;">
@@ -195,10 +197,11 @@
         renderFilms(filtered);
       }
 
+      // Initial rendering
       renderFilms(window.filmsData);
-      renderFavorites();
       syncFavoritesGlobal();
 
+      // Zet event listeners
       document.getElementById('searchInput').addEventListener('input', filterFilms);
       document.getElementById('genreFilter').addEventListener('change', filterFilms);
       document.getElementById('yearFilter').addEventListener('change', filterFilms);

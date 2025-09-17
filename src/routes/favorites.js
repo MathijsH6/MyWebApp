@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../dao/db');
+const { requireLogin } = require('../middleware/authentication');
 
 // Favoriet toevoegen
-router.post('/add', (req, res) => {
-  if (!req.session.customer_id) {
-    return res.status(401).json({ error: 'Je bent niet ingelogd. Maak een account aan en log in.' });
-  }
+router.post('/add', requireLogin, (req, res) => {
   const { filmId } = req.body;
   pool.query(
     'INSERT IGNORE INTO customer_favorite (customer_id, film_id) VALUES (?, ?)',
@@ -19,10 +17,7 @@ router.post('/add', (req, res) => {
 });
 
 // Favoriet verwijderen
-router.post('/remove', (req, res) => {
-  if (!req.session.customer_id) {
-    return res.status(401).json({ error: 'Je bent niet ingelogd.' });
-  }
+router.post('/remove', requireLogin, (req, res) => {
   const { filmId } = req.body;
   pool.query(
     'DELETE FROM customer_favorite WHERE customer_id = ? AND film_id = ?',
@@ -35,10 +30,7 @@ router.post('/remove', (req, res) => {
 });
 
 // Favorieten ophalen voor ingelogde gebruiker
-router.get('/list', (req, res) => {
-  if (!req.session.customer_id) {
-    return res.status(401).json({ error: 'Niet ingelogd.' });
-  }
+router.get('/list', requireLogin, (req, res) => {
   pool.query(
     'SELECT film_id FROM customer_favorite WHERE customer_id = ?',
     [req.session.customer_id],

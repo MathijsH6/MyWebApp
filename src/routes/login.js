@@ -18,18 +18,18 @@ router.post('/', (req, res) => {
     async (err, results) => {
       if (err || results.length === 0) {
         return res.status(401).render('login', {
-          error: 'Onjuiste gegevens.',
+          error: 'Geen bestaand account met deze gegevens.',
           customer_id: null,
-          favoriteIds: []
+          favoriteIds: [],
         });
       }
       const user = results[0];
       const match = await bcrypt.compare(password, user.password || '');
       if (!match) {
         return res.status(401).render('login', {
-          error: 'Onjuiste gegevens.',
+          error: 'Geen bestaand account met deze gegevens.',
           customer_id: null,
-          favoriteIds: []
+          favoriteIds: [],
         });
       }
       req.session.customer_id = user.customer_id;

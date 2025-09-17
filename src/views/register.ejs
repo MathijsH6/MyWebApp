@@ -2,42 +2,88 @@
 <html lang="nl">
   <head>
     <meta charset="UTF-8">
-    <title>Registreren</title>
+    <title><%= user ? 'Account aanpassen' : 'Registreren' %></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <script>
-    window.isLoggedIn = "<%= typeof customer_id !== 'undefined' && customer_id ? 'true' : 'false' %>";
-    window.favoriteIds = [];
-    </script>
-    <%- include('partials/header') %>
-    <div class="container mt-5">
-      <h2>Registreren</h2>
-      <% if (typeof error !== 'undefined' && error) { %>
-        <div class="alert alert-danger"><%= error %></div>
-      <% } %>
-      <form method="POST" action="/register">
-        <div class="mb-3">
-          <label for="first_name" class="form-label">Voornaam</label>
-          <input type="text" class="form-control" id="first_name" name="first_name" required>
-        </div>
-        <div class="mb-3">
-          <label for="last_name" class="form-label">Achternaam</label>
-          <input type="text" class="form-control" id="last_name" name="last_name" required>
-        </div>
-        <div class="mb-3">
-          <label for="email" class="form-label">E-mail</label>
-          <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Wachtwoord</label>
-          <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Registreren</button>
-      </form>
-      <p class="mt-3">Heb je al een account? <a href="/login">Inloggen</a></p>
+    <%- include('partials/header', { customer_id: customer_id }) %>
+    <div class="form-container">
+      <div class="form-card">
+        <h2 class="mb-4 text-center"><%= user ? 'Account aanpassen' : 'Registreren' %></h2>
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+        <form method="POST" action="/register" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label for="firstname" class="form-label">Voornaam</label>
+            <input type="text" class="form-control" id="firstname" name="firstname" value="<%= user ? user.first_name : '' %>" required>
+            <div class="invalid-feedback">Vul je voornaam in.</div>
+          </div>
+          <div class="mb-3">
+            <label for="lastname" class="form-label">Achternaam</label>
+            <input type="text" class="form-control" id="lastname" name="lastname" value="<%= user ? user.last_name : '' %>" required>
+            <div class="invalid-feedback">Vul je achternaam in.</div>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">E-mail</label>
+            <input type="email" class="form-control" id="email" name="email" value="<%= user ? user.email : '' %>" required>
+            <div class="invalid-feedback">Vul een geldig e-mailadres in.</div>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label"><%= user ? 'Nieuw wachtwoord (optioneel)' : 'Wachtwoord' %></label>
+            <input type="password" class="form-control" id="password" name="password" <%= user ? '' : 'required' %>>
+            <div class="invalid-feedback">Vul een wachtwoord in.</div>
+          </div>
+          <div class="mb-3">
+            <label for="address1" class="form-label">Adresregel 1</label>
+            <input type="text" class="form-control" id="address1" name="address1" value="<%= user ? user.address : '' %>" required>
+            <div class="invalid-feedback">Vul je adres in.</div>
+          </div>
+          <div class="mb-3">
+            <label for="address2" class="form-label">Adresregel 2 <span class="text-muted">(optioneel)</span></label>
+            <input type="text" class="form-control" id="address2" name="address2" value="<%= user ? user.address2 : '' %>">
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="postcode" class="form-label">Postcode</label>
+              <input type="text" class="form-control" id="postcode" name="postcode" value="<%= user ? user.postal_code : '' %>" required>
+              <div class="invalid-feedback">Vul je postcode in.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="city" class="form-label">Stad</label>
+              <input type="text" class="form-control" id="city" name="city" value="<%= user ? user.city : '' %>" required>
+              <div class="invalid-feedback">Vul je stad in.</div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="country" class="form-label">Land</label>
+            <input type="text" class="form-control" id="country" name="country" value="<%= user ? user.country : '' %>" required>
+            <div class="invalid-feedback">Vul je land in.</div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100"><%= user ? 'Opslaan' : 'Registreren' %></button>
+        </form>
+        <% if (!user) { %>
+          <p class="mt-3 text-center">Heb je al een account? <a href="/login">Inloggen</a></p>
+        <% } %>
+      </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Bootstrap client-side validatie
+      (() => {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+          form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      })();
+    </script>
   </body>
 </html>
