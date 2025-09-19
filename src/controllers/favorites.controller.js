@@ -1,21 +1,24 @@
-let favorites = []; // Temporary in-memory favorites
+const service = require('../services/favorites.service');
 
-function addFavorite(req, res) {
-  const filmId = req.body.filmId;
-  if (!favorites.includes(filmId)) {
-    favorites.push(filmId);
-  }
-  res.json({ success: true, favorites });
+function add(req, res) {
+  service.add(req.session.customer_id, req.body.filmId, (err) => {
+    if (err) return res.status(500).json({ error: 'Databasefout.' });
+    res.json({ success: true });
+  });
 }
 
-function removeFavorite(req, res) {
-  const filmId = req.body.filmId;
-  favorites = favorites.filter(id => id !== filmId);
-  res.json({ success: true, favorites });
+function remove(req, res) {
+  service.remove(req.session.customer_id, req.body.filmId, (err) => {
+    if (err) return res.status(500).json({ error: 'Databasefout.' });
+    res.json({ success: true });
+  });
 }
 
-function listFavorites(req, res) {
-  res.json({ favorites });
+function list(req, res) {
+  service.list(req.session.customer_id, (err, ids) => {
+    if (err) return res.status(500).json({ error: 'Databasefout.' });
+    res.json({ favoriteIds: ids });
+  });
 }
 
-module.exports = { addFavorite, removeFavorite, listFavorites };
+module.exports = { add, remove, list };

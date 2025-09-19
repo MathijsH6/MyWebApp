@@ -11,10 +11,13 @@
     <div class="form-container">
       <div class="form-card">
         <h2 class="mb-4 text-center"><%= user ? 'Account aanpassen' : 'Registreren' %></h2>
+        <% if (typeof success !== 'undefined' && success) { %>
+          <div class="alert alert-success"><%= success %></div>
+        <% } %>
         <% if (typeof error !== 'undefined' && error) { %>
           <div class="alert alert-danger"><%= error %></div>
         <% } %>
-        <form method="POST" action="/register" class="needs-validation" novalidate>
+        <form method="POST" action="/profile" class="needs-validation" novalidate>
           <div class="mb-3">
             <label for="firstname" class="form-label">Voornaam</label>
             <input type="text" class="form-control" id="firstname" name="firstname" value="<%= user ? user.first_name : '' %>" required>

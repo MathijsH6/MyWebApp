@@ -32,4 +32,33 @@ function validateRegister(req, res, next) {
   next();
 }
 
-module.exports = { validateRegister };
+function validateProfile(req, res, next) {
+  const {
+    firstname,
+    lastname,
+    address1,
+    postcode,
+    city,
+    country,
+    phone
+  } = req.body;
+
+  if (
+    !firstname ||
+    !lastname ||
+    !address1 ||
+    !postcode ||
+    !city ||
+    !country ||
+    !phone
+  ) {
+    return res.status(400).render('profile', {
+      error: 'Vul alle verplichte velden in.',
+      customer_id: req.session.customer_id || null,
+      user: req.body
+    });
+  }
+  next();
+}
+
+module.exports = { validateRegister, validateProfile };

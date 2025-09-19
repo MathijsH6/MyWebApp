@@ -8,32 +8,132 @@
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 <body>
-    <script>
-      window.isLoggedIn = "<%= typeof customer_id !== 'undefined' && customer_id ? 'true' : 'false' %>";
-      window.favoriteIds = JSON.parse('<%- JSON.stringify(favoriteIds || []) %>') ;
-    </script>
-    <%- include('partials/header', { customer_id: customer_id }) %>
-  <div class="container">
+  <script>
+    window.isLoggedIn = "<%= typeof customer_id !== 'undefined' && customer_id ? 'true' : 'false' %>";
+    window.favoriteIds = JSON.parse('<%- JSON.stringify(favoriteIds || []) %>');
+  </script>
+  <%- include('partials/header', { customer_id: customer_id }) %>
+  <div class="container py-4">
     <h1 class="mb-4 text-center">Over Sakila Filmverhuur</h1>
     <p class="lead text-center">
       Sakila Filmverhuur is dé plek voor het huren van films. Wij bieden een groot aanbod, snelle service en algemene aandacht voor iedere klant.<br>
-      Ons team staat soms klaar om je te helpen bij het vinden van jouw favoriete film!
+      Ons team staat klaar om je te helpen bij het vinden van jouw favoriete film!
     </p>
     <div class="row justify-content-center mt-5">
-      <div class="col-md-8">
-        <h3>Onze missie</h3>
+      <div class="col-md-10">
+        <h2 class="mb-3 text-primary">Functionele mogelijkheden</h2>
+        <div class="accordion" id="epicsAccordion">
+          <!-- Epic 1 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingEpic1">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEpic1" aria-expanded="true" aria-controls="collapseEpic1">
+                Epic 1: Films zoeken, filteren en bekijken
+              </button>
+            </h2>
+            <div id="collapseEpic1" class="accordion-collapse collapse show" aria-labelledby="headingEpic1" data-bs-parent="#epicsAccordion">
+              <div class="accordion-body">
+                <ul>
+                  <li><strong>Film zoeken op titel:</strong> Zoek films snel via de zoekbalk op de filmpagina. Resultaten tonen naam, jaar en beschrijving.</li>
+                  <li><strong>Films filteren:</strong> Filter films op genre en jaar. Meerdere filters tegelijk mogelijk.</li>
+                  <li><strong>Filmdetails bekijken:</strong> Bekijk uitgebreide informatie per film, zoals synopsis, genre, jaar, rating en cast.</li>
+                </ul>
+                <span class="badge bg-secondary me-1">Zoekfunctie</span>
+                <span class="badge bg-secondary me-1">Filtersysteem</span>
+                <span class="badge bg-secondary me-1">Film detailpagina</span>
+              </div>
+            </div>
+          </div>
+          <!-- Epic 2 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingEpic2">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEpic2" aria-expanded="false" aria-controls="collapseEpic2">
+                Epic 2: Favorieten beheren
+              </button>
+            </h2>
+            <div id="collapseEpic2" class="accordion-collapse collapse" aria-labelledby="headingEpic2" data-bs-parent="#epicsAccordion">
+              <div class="accordion-body">
+                <ul>
+                  <li><strong>Films toevoegen aan favorieten:</strong> Voeg films toe aan je favorietenlijst via een knop op de film detailpagina of het overzicht.</li>
+                  <li><strong>Favorieten verwijderen:</strong> Verwijder films eenvoudig uit je favorietenlijst.</li>
+                  <li><strong>Favorieten bekijken:</strong> Bekijk je favorieten via een aparte favorietenlijst.</li>
+                </ul>
+                <span class="badge bg-secondary me-1">Favorieten opslaan</span>
+                <span class="badge bg-secondary me-1">Favorieten beheren</span>
+                <span class="badge bg-secondary me-1">Favorieten tonen</span>
+              </div>
+            </div>
+          </div>
+          <!-- Epic 3 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingEpic3">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEpic3" aria-expanded="false" aria-controls="collapseEpic3">
+                Epic 3: Accountbeheer en authenticatie
+              </button>
+            </h2>
+            <div id="collapseEpic3" class="accordion-collapse collapse" aria-labelledby="headingEpic3" data-bs-parent="#epicsAccordion">
+              <div class="accordion-body">
+                <ul>
+                  <li><strong>Account aanmaken:</strong> Registreer eenvoudig een nieuw account met unieke e-mail en veilig wachtwoord.</li>
+                  <li><strong>Inloggen en uitloggen:</strong> Log veilig in en uit via het dropdown-menu.</li>
+                  <li><strong>Profiel aanpassen:</strong> Pas je profielgegevens aan en ontvang een succesmelding bij wijziging.</li>
+                </ul>
+                <span class="badge bg-secondary me-1">Registratie</span>
+                <span class="badge bg-secondary me-1">Login</span>
+                <span class="badge bg-secondary me-1">Profiel wijzigen</span>
+              </div>
+            </div>
+          </div>
+          <!-- Epic 4 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingEpic4">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEpic4" aria-expanded="false" aria-controls="collapseEpic4">
+                Epic 4: Winkelinformatie en locaties
+              </button>
+            </h2>
+            <div id="collapseEpic4" class="accordion-collapse collapse" aria-labelledby="headingEpic4" data-bs-parent="#epicsAccordion">
+              <div class="accordion-body">
+                <ul>
+                  <li><strong>Winkelinformatie bekijken:</strong> Bekijk adres, stad, land en contactgegevens van alle winkels.</li>
+                  <li><strong>Locaties bekijken:</strong> Overzicht van alle winkels en hun gegevens.</li>
+                </ul>
+                <span class="badge bg-secondary me-1">Locatie overzicht</span>
+                <span class="badge bg-secondary me-1">Winkel detailpagina</span>
+              </div>
+            </div>
+          </div>
+          <!-- Epic 5 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingEpic5">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEpic5" aria-expanded="false" aria-controls="collapseEpic5">
+                Epic 5: Overige functionaliteit en UX
+              </button>
+            </h2>
+            <div id="collapseEpic5" class="accordion-collapse collapse" aria-labelledby="headingEpic5" data-bs-parent="#epicsAccordion">
+              <div class="accordion-body">
+                <ul>
+                  <li><strong>Contact opnemen:</strong> Gebruik de contactpagina om vragen te stellen aan de winkel.</li>
+                  <li><strong>Overzicht en navigatie:</strong> Heldere navigatie en foutmeldingen zorgen voor een prettige gebruikerservaring.</li>
+                </ul>
+                <span class="badge bg-secondary me-1">Contactpagina</span>
+                <span class="badge bg-secondary me-1">About-pagina</span>
+                <span class="badge bg-secondary me-1">Foutmeldingen & alerts</span>
+                <span class="badge bg-secondary me-1">Responsive design</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="my-5">
+        <h3 class="mb-3 text-primary">Onze missie</h3>
         <p>
           Wij willen filmplezier voor iedereen toegankelijk maken. Met een breed aanbod en een gebruiksvriendelijke website zorgen wij dat je altijd iets nieuws kunt ontdekken.
         </p>
-        <h3>Ons team</h3>
+        <h3 class="mb-3 text-primary">Ons team</h3>
         <p>
           Ons enthousiaste team bestaat uit filmliefhebbers die je graag adviseren en helpen bij vragen.
         </p>
       </div>
     </div>
   </div>
-  </script>
-  
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

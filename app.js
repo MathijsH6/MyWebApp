@@ -15,6 +15,7 @@ var locationsRouter = require('./src/routes/locations');
 var favoritesRouter = require('./src/routes/favorites');
 var registerRouter = require('./src/routes/register');
 var loginRouter = require('./src/routes/login');
+var profileRouter = require('./src/routes/profile');
 
 var app = express();
 
@@ -46,6 +47,7 @@ app.use('/locations', locationsRouter);
 app.use('/favorites', favoritesRouter);
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
+app.use('/profile', profileRouter);
 
 // Optional: direct /login to usersRouter for login POST
 //app.use('/login', usersRouter);
