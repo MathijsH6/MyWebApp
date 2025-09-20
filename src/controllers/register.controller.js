@@ -31,7 +31,7 @@ function submit(req, res) {
         error: 'Registratie mislukt.'
       });
     }
-    // Optioneel: sessie zetten -> req.session.customer_id = result.customer_id;
+    
     res.redirect('/');
   });
 }

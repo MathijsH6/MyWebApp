@@ -10,11 +10,11 @@ function list(req, res) {
         if (err2) {
           res.status(500).send('Database fout');
         } else {
-          // Unieke jaren en ratings uit films
+          // Unieke jaren en ratings ophalen
           const years = [...new Set(movies.map(f => f.release_year))].sort();
           const ratings = [...new Set(movies.map(f => f.rating))].sort();
 
-          // In je list(req, res) functie:
+          // Als ingelogd, haal favorieten op
           if (req.session.customer_id) {
             pool.query(
               'SELECT film_id FROM customer_favorite WHERE customer_id = ?',
@@ -28,7 +28,7 @@ function list(req, res) {
                   ratings,
                   title: 'Sakila Films',
                   customer_id: req.session.customer_id,
-                  favoriteIds // <-- meegeven aan EJS!
+                  favoriteIds 
                 });
               }
             );
@@ -55,7 +55,7 @@ function detail(req, res) {
     if (err || !film) {
       res.status(404).send('Film niet gevonden');
     } else {
-      res.render('movie-detail', { film, title: film.title, customer_id: req.session.customer_id }); // <-- toegevoegd!
+      res.render('movie-detail', { film, title: film.title, customer_id: req.session.customer_id }); 
     }
   });
 }

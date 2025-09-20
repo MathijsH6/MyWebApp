@@ -24,7 +24,7 @@ function update(req, res) {
         success: null
       });
     }
-    // Succes: geef een succesmelding mee
+    
     res.render('profile', {
       customer_id: req.session.customer_id,
       user: data,
