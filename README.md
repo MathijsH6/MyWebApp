@@ -61,7 +61,6 @@ De applicatie volgt het MVC-principe:
 - Winkelinformatie: Bekijk locaties en details van winkels.
 - Contact & About: Algemene informatie en contactpagina.
 - Heldere foutmeldingen: Altijd een duidelijke melding bij fouten.
-- Responsive design: Werkt op desktop, tablet en mobiel.
 
 Zie [about.ejs](src/views/about.ejs) voor een volledig overzicht van de epics en user stories.
 
